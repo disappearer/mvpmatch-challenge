@@ -1,32 +1,43 @@
 import { ChangeEventHandler, useState } from 'react';
-import Movie from '../../components/Movie';
+import { MovieList } from '../../components/MovieList';
 import { Results } from '../../types';
 import { search as apiSearch } from '../../util/api';
-import { isInFavorites } from '../../util/favorites';
 import { useFavorites } from '../hooks';
 import './Search.css';
 
 function Search() {
   const [shouldShowResults, setShouldShowResults] = useState(false);
-  const [searchText, setSearchText] = useState('');
-  console.log('searchText: ', searchText);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [searchText, setSearchText] = useState('');
   const [results, setResults] = useState<Results>([]);
-  const [error, setError] = useState<string | null>(null);
+
+  const [requestError, setRequestError] = useState<string | null>(null);
+  const [inputError, setInputError] = useState<string | null>(null);
 
   const { favoriteIds, toggleFavorite } = useFavorites();
 
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setSearchText(event.target.value);
+    const inputText = event.target.value;
+    setSearchText(inputText);
+
+    if (inputError && inputText.length) {
+      setInputError(null);
+    }
   };
 
   const clearState = () => {
-    setError(null);
+    setRequestError(null);
     setShouldShowResults(false);
   };
 
   const search: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+
+    if (!searchText.length) {
+      return setInputError('Please enter something.');
+    }
+
     clearState();
     setIsLoading(true);
 
@@ -41,7 +52,9 @@ function Search() {
         setIsLoading(false);
       },
       (err) => {
-        setError(err);
+        console.log('err: ', err);
+        setRequestError(err);
+        setShouldShowResults(true);
         setIsLoading(false);
       },
     );
@@ -73,25 +86,21 @@ function Search() {
               </button>
             </div>
           </div>
+          {inputError && <p className="help is-danger">{inputError}</p>}
         </form>
       </div>
       {shouldShowResults && (
         <div className="block mt-6">
-          {error ? (
-            <div className="is-size-5">{error}</div>
+          {requestError ? (
+            <div className="is-size-5">{requestError}</div>
           ) : (
             <>
-              <div className="is-size-5">We have found these movies</div>
-              <div className="block Search-grid mt-4">
-                {results.map((result) => (
-                  <Movie
-                    key={result.imdbID}
-                    movie={result}
-                    isFavorite={isInFavorites(result.imdbID, favoriteIds)}
-                    toggleFavorite={toggleFavorite}
-                  />
-                ))}
-              </div>
+              <div className="block is-size-5">We have found these movies</div>
+              <MovieList
+                movies={results}
+                favoriteIds={favoriteIds}
+                toggleFavorite={toggleFavorite}
+              />
             </>
           )}
         </div>

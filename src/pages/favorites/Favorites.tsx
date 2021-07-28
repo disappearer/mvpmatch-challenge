@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import Movie from '../../components/Movie';
+import { MovieList } from '../../components/MovieList';
 import { Results } from '../../types';
 import { getFavorites as apiGetFavorites } from '../../util/api';
-import { isInFavorites } from '../../util/favorites';
 import { useFavorites } from '../hooks';
 
 function Favorites() {
@@ -51,18 +50,11 @@ function Favorites() {
           {error ? (
             <div className="is-size-5">{error}</div>
           ) : (
-            <>
-              <div className="block mt-4 Search-grid">
-                {results.map((result) => (
-                  <Movie
-                    key={result.imdbID}
-                    movie={result}
-                    isFavorite={isInFavorites(result.imdbID, favoriteIds)}
-                    toggleFavorite={toggleFavorite}
-                  />
-                ))}
-              </div>
-            </>
+            <MovieList
+              movies={results}
+              favoriteIds={favoriteIds}
+              toggleFavorite={toggleFavorite}
+            />
           )}
         </div>
       )}

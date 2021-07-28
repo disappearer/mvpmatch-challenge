@@ -1,4 +1,4 @@
-import { Movie as MovieType } from '../types';
+import { Movie as MovieType } from '../../types';
 import './Movie.css';
 
 type Props = {

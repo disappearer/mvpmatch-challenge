@@ -1,30 +1,10 @@
 import { ChangeEventHandler, useState } from 'react';
+import Movie from '../../components/Movie';
+import { Results } from '../../types';
+import { search as apiSearch } from '../../util/api';
+import { isInFavorites } from '../../util/favorites';
+import { useFavorites } from '../hooks';
 import './Search.css';
-
-type Movie = {
-  Poster: string;
-  Title: string;
-  Type: string;
-  Year: string;
-  imdbID: string;
-};
-
-type Results = Movie[];
-
-enum ResponseSuccess {
-  True = 'True',
-  False = 'False',
-}
-
-type SuccessResponse = {
-  Response: ResponseSuccess.True;
-  Search: Results;
-  totalResults: string;
-};
-
-type ErrorResponse = { Response: ResponseSuccess.False; Error: string };
-
-type Response = SuccessResponse | ErrorResponse;
 
 function Search() {
   const [shouldShowResults, setShouldShowResults] = useState(false);
@@ -33,6 +13,8 @@ function Search() {
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<Results>([]);
   const [error, setError] = useState<string | null>(null);
+
+  const { favoriteIds, toggleFavorite } = useFavorites();
 
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearchText(event.target.value);
@@ -45,37 +27,24 @@ function Search() {
 
   const search: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-
     clearState();
     setIsLoading(true);
 
     const trimmedSearchText = searchText.trim();
     setSearchText(trimmedSearchText);
 
-    fetch(
-      `https://movie-database-imdb-alternative.p.rapidapi.com/?s=${trimmedSearchText}&page=1&r=json`,
-      {
-        method: 'GET',
-        headers: {
-          'x-rapidapi-key':
-            'e4b6367955mshe158ddfb218d84ap11538djsn61ee918a2120',
-          'x-rapidapi-host': 'movie-database-imdb-alternative.p.rapidapi.com',
-        },
-      },
-    )
-      .then((response) => response.json())
-      .then((response: Response) => {
-        if (response.Response === ResponseSuccess.True) {
-          setResults(response.Search);
-        } else {
-          setError(response.Error);
-        }
+    apiSearch(
+      trimmedSearchText,
+      (results) => {
+        setResults(results);
         setShouldShowResults(true);
-      })
-      .catch((err) => {
+        setIsLoading(false);
+      },
+      (err) => {
         setError(err);
-      })
-      .finally(() => setIsLoading(false));
+        setIsLoading(false);
+      },
+    );
   };
 
   return (
@@ -115,21 +84,12 @@ function Search() {
               <div className="is-size-5">We have found these movies</div>
               <div className="block Search-grid mt-4">
                 {results.map((result) => (
-                  <div key={result.imdbID} className="card">
-                    <div className="card-image">
-                      <figure className="image is-3by4">
-                        <img src={result.Poster} alt="Placeholder image" />
-                      </figure>
-                    </div>
-                    <div className="card-content">
-                      <div className="media-content">
-                        <p className="title is-4">{result.Title}</p>
-                        <p className="subtitle is-6">
-                          {result.Type} ({result.Year})
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  <Movie
+                    key={result.imdbID}
+                    movie={result}
+                    isFavorite={isInFavorites(result.imdbID, favoriteIds)}
+                    toggleFavorite={toggleFavorite}
+                  />
                 ))}
               </div>
             </>

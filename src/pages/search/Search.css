@@ -1,0 +1,12 @@
+.Search-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 30px;
+  row-gap: 35px;
+}
+
+@media only screen and (max-width: 768px) {
+  .Search-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

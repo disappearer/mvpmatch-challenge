@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import Favorites from './pages/favorites/Favorites';
 import Search from './pages/search/Search';
 
-function App() {
+const App = () => {
   return (
     <HashRouter basename="/">
       <Navbar />
@@ -22,6 +22,6 @@ function App() {
       </div>
     </HashRouter>
   );
-}
+};
 
 export default App;

@@ -7,7 +7,7 @@ import { useFavorites } from '../hooks';
 const NO_FAVORITES_MESSAGE = `You have not added any movies or shows to favorites.
  You can do so by clicking the star next to the title in the search results list.`;
 
-function Favorites() {
+const Favorites = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [results, setResults] = useState<Results>([]);
   const [error, setError] = useState<string | null>(null);
@@ -68,6 +68,6 @@ function Favorites() {
       )}
     </>
   );
-}
+};
 
 export default Favorites;

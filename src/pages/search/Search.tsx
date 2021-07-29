@@ -5,7 +5,7 @@ import { search as apiSearch } from '../../util/api';
 import { useFavorites } from '../hooks';
 import './Search.css';
 
-function Search() {
+const Search = () => {
   const [shouldShowResults, setShouldShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -106,6 +106,6 @@ function Search() {
       )}
     </>
   );
-}
+};
 
 export default Search;

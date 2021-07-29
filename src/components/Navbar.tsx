@@ -14,20 +14,18 @@ function Navbar() {
             <span className="is-size-3">Mooviez</span>
           </a>
         </div>
-        <div className="navbar-menu">
-          <div className="navbar-end">
-            <Link className="navbar-item" to="/" activeOnlyWhenExact={true}>
-              Home
-            </Link>
+        <div className="navbar-end">
+          <Link className="navbar-item" to="/" activeOnlyWhenExact={true}>
+            Home
+          </Link>
 
-            <Link
-              className="navbar-item"
-              to="/favorites"
-              activeOnlyWhenExact={true}
-            >
-              Favorites
-            </Link>
-          </div>
+          <Link
+            className="navbar-item"
+            to="/favorites"
+            activeOnlyWhenExact={true}
+          >
+            Favorites
+          </Link>
         </div>
       </div>
     </nav>

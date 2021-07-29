@@ -46,7 +46,7 @@ function Favorites() {
       getFavorites(favoriteIds);
       setAreFavoritesLoaded(true);
     }
-  }, [areFavoritesLoaded, favoriteIds, getFavorites]);
+  }, [areFavoritesLoaded, favoriteIds, results.length, getFavorites]);
 
   return (
     <>

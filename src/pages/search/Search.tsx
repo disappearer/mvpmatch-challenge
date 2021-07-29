@@ -52,7 +52,6 @@ function Search() {
         setIsLoading(false);
       },
       (err) => {
-        console.log('err: ', err);
         setRequestError(err);
         setShouldShowResults(true);
         setIsLoading(false);

@@ -48,7 +48,6 @@ export const getFavorites = (
       onSuccess(results);
     })
     .catch((error) => {
-      console.log('error: ', error);
       onError(error);
     });
 };

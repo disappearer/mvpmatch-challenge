@@ -4,6 +4,9 @@ import { Results } from '../../types';
 import { getFavorites as apiGetFavorites } from '../../util/api';
 import { useFavorites } from '../hooks';
 
+const NO_FAVORITES_MESSAGE = `You have not added any movies or shows to favorites.
+ You can do so by clicking the star next to the title in the search results list.`;
+
 function Favorites() {
   const [isLoading, setIsLoading] = useState(true);
   const [results, setResults] = useState<Results>([]);
@@ -34,7 +37,12 @@ function Favorites() {
   }, []);
 
   useEffect(() => {
-    if (!areFavoritesLoaded && favoriteIds.length) {
+    if (!favoriteIds.length && !results.length) {
+      setIsLoading(false);
+      return setError(NO_FAVORITES_MESSAGE);
+    }
+
+    if (!areFavoritesLoaded) {
       getFavorites(favoriteIds);
       setAreFavoritesLoaded(true);
     }

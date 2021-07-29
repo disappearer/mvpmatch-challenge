@@ -10,7 +10,7 @@ function Navbar() {
       <div className="container is-max-desktop">
         <div className="navbar-brand">
           <a className="navbar-item" href="https://bulma.io">
-            <img src="/clapper.svg" width="40" height="20" />
+            <img src="./clapper.svg" width="40" height="20" />
             <span className="is-size-3">Mooviez</span>
           </a>
         </div>

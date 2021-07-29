@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { MovieList } from '../../components/MovieList';
+import MovieList from '../../components/MovieList/MovieList';
 import { Results } from '../../types';
 import { getFavorites as apiGetFavorites } from '../../util/api';
 import { useFavorites } from '../hooks';

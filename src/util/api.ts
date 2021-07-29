@@ -1,20 +1,20 @@
 import { Results, Response, ResponseSuccess } from '../types';
 
+const API_KEY = process.env.REACT_APP_RAPID_API_KEY as string;
+const API_HOST = process.env.REACT_APP_RAPID_API_HOST as string;
+
 export const search = (
   searchText: string,
   onSuccess: (results: Results) => void,
   onError: (error: string) => void,
 ) => {
-  fetch(
-    `https://movie-database-imdb-alternative.p.rapidapi.com/?s=${searchText}&page=1&r=json`,
-    {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': 'e4b6367955mshe158ddfb218d84ap11538djsn61ee918a2120',
-        'x-rapidapi-host': 'movie-database-imdb-alternative.p.rapidapi.com',
-      },
+  fetch(`https://${API_HOST}/?s=${searchText}&page=1&r=json`, {
+    method: 'GET',
+    headers: {
+      'x-rapidapi-key': API_KEY,
+      'x-rapidapi-host': API_HOST,
     },
-  )
+  })
     .then((response) => response.json())
     .then((response: Response) => {
       if (response.Response === ResponseSuccess.True) {
@@ -35,23 +35,20 @@ export const getFavorites = (
 ) => {
   Promise.all(
     favoriteIds.map((imdbId) =>
-      fetch(
-        `https://movie-database-imdb-alternative.p.rapidapi.com/?i=${imdbId}&r=json`,
-        {
-          method: 'GET',
-          headers: {
-            'x-rapidapi-key':
-              'e4b6367955mshe158ddfb218d84ap11538djsn61ee918a2120',
-            'x-rapidapi-host': 'movie-database-imdb-alternative.p.rapidapi.com',
-          },
+      fetch(`https://${API_HOST}/?i=${imdbId}&r=json`, {
+        method: 'GET',
+        headers: {
+          'x-rapidapi-key': API_KEY,
+          'x-rapidapi-host': API_HOST,
         },
-      ).then((response) => response.json()),
+      }).then((response) => response.json()),
     ),
   )
     .then((results) => {
       onSuccess(results);
     })
     .catch((error) => {
+      console.log('error: ', error);
       onError(error);
     });
 };

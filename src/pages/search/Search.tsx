@@ -1,5 +1,5 @@
 import { ChangeEventHandler, useState } from 'react';
-import { MovieList } from '../../components/MovieList';
+import MovieList from '../../components/MovieList/MovieList';
 import { Results } from '../../types';
 import { search as apiSearch } from '../../util/api';
 import { useFavorites } from '../hooks';
